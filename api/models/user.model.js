@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const UserSchema=new monogoose.Schema({
+const UserSchema=new mongoose.Schema({
     username:{
         type:String,
         required:true,
@@ -15,7 +16,11 @@ const UserSchema=new monogoose.Schema({
         type:String,
         required:true,
         unique:true,
+    },
+    profilepicture:{
+        type:String,
+        default:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
     }
 })
-const User=monogoose.model("User",UserSchema);
+const User=mongoose.model("User",UserSchema);
 export default User;

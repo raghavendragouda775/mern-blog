@@ -11,6 +11,6 @@ export default {
     extend: {},
   },
   plugins: [
-    flowbitePlugin, // Use the imported Flowbite plugin
+    flowbitePlugin, 
   ],
 }
