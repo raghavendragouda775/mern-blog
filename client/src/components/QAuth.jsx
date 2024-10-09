@@ -33,7 +33,7 @@ function QAuth() {
 
             if (res.ok) {
                 dispatch(signInSuccess(data));
-                navigate('/');
+                navigate('/dashboard');
             } else {
                 console.error('Google Sign-In API error:', data.message);
             }
