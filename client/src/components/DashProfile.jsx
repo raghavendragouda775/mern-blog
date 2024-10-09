@@ -7,9 +7,10 @@ import { useDispatch } from 'react-redux';
 import { Modal} from 'flowbite-react'
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutSuccess } from '../redux/User/UserSlice';
+import { Link } from 'react-router-dom';
 
 function DashProfile() {
-    const { currentUser,error } = useSelector((state) => state.user);
+    const { currentUser,error,loading} = useSelector((state) => state.user);
     const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
     const [showModal,setShowModal]=useState(false);
     const [updateUserFailure, setupdateFailure] = useState(null);
@@ -159,9 +160,19 @@ function DashProfile() {
                     id='password'
                     placeholder='Password'
                     onChange={handlechange} />
-                <Button type='submit' className={currentButtonStyle}>
-                    Update
+                <Button type='submit' className={currentButtonStyle} disabled={loading}>
+                    {loading?'Loading...':'Update'}
+                   
                 </Button>
+                {
+                    currentUser.isAdmin&&(
+                        <Link to={'/create-post'}>
+                        <Button type='button' gradientDuoTone='purpleToPink'className='w-full'>
+                            Create a Post
+                        </Button>
+                        </Link>
+                    )
+                }
             </form>
             <div className='text-red-500 font-semibold flex justify-between mt-4'>
                 <span onClick={()=>setShowModal(true)} className='cursor-pointer'>Delete Account</span>

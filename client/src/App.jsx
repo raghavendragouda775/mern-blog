@@ -12,6 +12,8 @@ import About from './pages/about'
 import Header from './components/Header'
 import Footercomp from './components/Footer'
 import PrivateAuth from './components/privateAuth'
+import OnlyAdminPrivate from './components/OnlyAdminPrivate';
+import CreatePost from './pages/CreatePost';
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +26,10 @@ function App() {
       <Route element={<PrivateAuth/>}>
 
       <Route path='/dashboard' element={<Dashboard/>}/>
+      </Route>
+      <Route element={<OnlyAdminPrivate/>}>
+
+      <Route path='/create-post' element={<CreatePost/>}/>
       </Route>
       <Route path='/projects' element={<Projects/>}/>
 
