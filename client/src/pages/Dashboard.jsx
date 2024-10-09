@@ -20,6 +20,7 @@ useEffect(()=>{
     <DashSidebar/>
     </div>
   {tab==='profile'&&<DashProfile/>}
+  {tab==='posts'&&<DashPosts/>}
    
    </div>
   )

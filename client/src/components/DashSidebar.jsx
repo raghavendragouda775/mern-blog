@@ -8,11 +8,15 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { signOutSuccess } from '../redux/User/UserSlice';
 import { useDispatch } from 'react-redux';
+import { HiDocumentText } from "react-icons/hi";
+import { useSelector } from 'react-redux';
 
 
 function DashSidebar() {
     const location=useLocation()
     const dispatch=useDispatch();
+    const currentUser=useSelector(state=>state.user.currentUser)
+    console.log(currentUser);
 const [tab,setTab]=useState('');
 const handleSignOut=async ()=>{
     try{
@@ -47,12 +51,22 @@ useEffect(()=>{
   return (
     <Sidebar className='w-full md:w-56'>
         <Sidebar.Items>
-            <Sidebar.ItemGroup>
+            <Sidebar.ItemGroup className='flex flex-col gap-2'>
                 
-                <Sidebar.Item active={tab==='profile'} href="/dashboard?tab=profile" icon={HiUser} label={'user'} labelColor='dark'>
+                <Sidebar.Item active={tab==='profile'} href="/dashboard?tab=profile" icon={HiUser} label={currentUser.isAdmin?'Admin':'User'} labelColor='dark'>
                     Profile
                 </Sidebar.Item>
+                {currentUser.isAdmin && (
+            <Sidebar.Item
+              active={tab === 'posts'}
+              href="/dashboard?tab=posts"
+              icon={HiDocumentText}
+            >
+              Posts
+            </Sidebar.Item>
+          )}
                 
+               
                 <Sidebar.Item  icon={HiArrowSmRight} href="/signout"label={'user'} labelColor='dark' onClick={handleSignOut}>
                     Sign Out
                 </Sidebar.Item>
