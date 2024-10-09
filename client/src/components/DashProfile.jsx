@@ -6,7 +6,7 @@ import { updateFailure, updateStart, updateSuccess } from '../redux/User/UserSli
 import { useDispatch } from 'react-redux';
 import { Modal} from 'flowbite-react'
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/User/UserSlice';
+import { deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutSuccess } from '../redux/User/UserSlice';
 
 function DashProfile() {
     const { currentUser,error } = useSelector((state) => state.user);
@@ -73,6 +73,27 @@ function DashProfile() {
             setupdateFailure(error.message);
         }
     };
+ const handleSignOut=async ()=>{
+    try{
+    const res=await fetch('/api/user/signout',{
+        method:'POST',
+        credentials:'include'
+    })
+    const data= await res.json()
+    if(!res.ok)
+    {
+        console.log(data.message);
+    }
+    else
+    {
+        dispatch(signOutSuccess())
+    }
+    
+}catch(error)
+{
+  console.log(error);
+}
+ }
 
     
     useEffect(() => {
@@ -144,7 +165,7 @@ function DashProfile() {
             </form>
             <div className='text-red-500 font-semibold flex justify-between mt-4'>
                 <span onClick={()=>setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-                <span className='cursor-pointer'>Sign Out</span>
+                <span onClick={handleSignOut}className='cursor-pointer'>Sign Out</span>
             </div>
             {updateUserSuccess && (
                 <Alert color='success' className='mt-5'>

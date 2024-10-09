@@ -6,12 +6,34 @@ import { FaMoon ,FaSun} from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signOutSuccess } from '../redux/User/UserSlice';
 
 export default function Header() {
   const path = useLocation().pathname;
   const dispatch=useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser); 
   const{theme}=useSelector((state)=>state.theme)
+  const handleSignOut=async ()=>{
+    try{
+    const res=await fetch('/api/user/signout',{
+        method:'POST',
+        credentials:'include'
+    })
+    const data= await res.json()
+    if(!res.ok)
+    {
+        console.log(data.message);
+    }
+    else
+    {
+        dispatch(signOutSuccess())
+    }
+    
+}catch(error)
+{
+  console.log(error);
+}
+ }
   
   const profilePicture = currentUser?.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
@@ -55,7 +77,7 @@ export default function Header() {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/sign-in">
