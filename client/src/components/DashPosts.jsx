@@ -3,19 +3,23 @@ import { Table } from 'flowbite-react';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Modal } from 'flowbite-react';
+import { Button } from 'flowbite-react';
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 function DashPosts() {
     const currentUser=useSelector(state=>state.user.currentUser)
     const [userposts,setuserposts]=useState([]);
     const[showmore,setshowmore]=useState(true);
-    console.log(userposts);
+    const [showModal,setShowModal]=useState(false);
+    const [postIdtodelete,setPostIdtodelete]=useState(' ')
  useEffect(()=>
  {
   const fetchPosts=async ()=>{
     
      try
      {
-        const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
+        const res = await fetch(`http://localhost:3000/api/post/getposts?userId=${currentUser._id}`);
         if(!res.ok)
         {
             console.log('Cant find Blog on this user')
@@ -44,7 +48,7 @@ function DashPosts() {
     {
        const startIndex =userposts.length;
        try{
-        const res=await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+        const res=await fetch(`http://localhost:3000/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
        
         if(res.ok)
         {
@@ -60,6 +64,33 @@ function DashPosts() {
         {
             console.log(error.message)
         }
+    }
+    const handledeletpost=async()=>{
+       setShowModal(false);
+       try
+       {
+        const res=await fetch(`http://localhost:3000/api/post/deletepost/${postIdtodelete}/${currentUser._id}`,
+            {
+                method:'DELETE',
+                credentials:'include'
+            }
+        )
+        console.log(res);
+        const data=await res.json();
+        if(!res.ok)
+        {
+            const errorText = await res.text(); 
+            console.log('Error:', errorText);
+            return;
+        }else
+        {
+            setuserposts((prev)=>prev.filter((post)=>post._id!==postIdtodelete))
+        }
+       }
+       catch(error)
+       {
+        console.log(error);
+       }
     }
  return <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 dark:scrollbar-thumb-slate-500'>
     {currentUser.isAdmin&&userposts.length>0?(
@@ -84,7 +115,7 @@ function DashPosts() {
                             {new Date(post.updatedAt).toLocaleDateString()}
                         </Table.Cell>
                         <Table.Cell>
-                            <Link   to='/post/${post.slug}'>
+                            <Link   to={`/post/${post.slug}`}>
                             <img
                             src={post.image}
                             alt={post.title}
@@ -99,7 +130,10 @@ function DashPosts() {
                             </Table.Cell>
                         <Table.Cell>{post.category}</Table.Cell>
                         <Table.Cell className='font-medium text-red-500 hover:underline cursor-pointer'>
-                            <span>
+                            <span onClick={()=>{
+                                setShowModal(true);
+                                setPostIdtodelete(post._id);
+                            }} >
                                 Delete
                             </span>
                         </Table.Cell>
@@ -128,6 +162,21 @@ function DashPosts() {
     ):(
         <p>You have no posts yet</p>
     )}
+     <Modal show={showModal} onClose={()=>{setShowModal(false)}} popup size='md'>
+
+          
+<Modal.Header/>
+<Modal.Body>
+    <div className='text-center'>
+     <HiOutlineExclamationCircle className='w-14 h-14 text-gray-400 dark:text-gray-200 mx-auto mb-4'/>
+      <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure you want to delete this post?</h3>
+      <div className='flex justify center gap-4'>
+        <Button color='failure' onClick={handledeletpost}>Yes,I'm Sure</Button>
+        <Button color='gray' onClick={()=>setShowModal(false)}>No Cancel</Button>
+      </div>
+    </div>
+</Modal.Body>
+</Modal>
  </div>
 }
 
