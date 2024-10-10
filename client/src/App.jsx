@@ -15,6 +15,7 @@ import PrivateAuth from './components/privateAuth'
 import OnlyAdminPrivate from './components/OnlyAdminPrivate';
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/Updatepost';
+import Postpage from './components/Postpage';
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ function App() {
       <Route path='/updatepost/:postId' element={<UpdatePost/>}/>
       </Route>
       <Route path='/projects' element={<Projects/>}/>
+      <Route path='/post/:postSlug' element={<Postpage/>}></Route>
 
       
     </Routes>
