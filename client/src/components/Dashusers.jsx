@@ -79,13 +79,12 @@ function DashUsers() {
        setShowModal(false);
        try
        {
-        const res=await fetch(`http://localhost:3000/api/user/deleteuser/${UserIdtodelete}/${currentUser._id}`,
+        const res=await fetch(`/api/user/delete/${UserIdtodelete}`,
             {
                 method:'DELETE',
                 credentials:'include'
             }
         )
-        console.log(res);
         const data=await res.json();
         if(!res.ok)
         {
@@ -95,6 +94,7 @@ function DashUsers() {
         }else
         {
             setusers((prev)=>prev.filter((user)=>user._id!==UserIdtodelete))
+            setShowModal(false);
         }
        }
        catch(error)
