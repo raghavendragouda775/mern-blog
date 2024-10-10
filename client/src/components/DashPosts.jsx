@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 function DashPosts() {
     const currentUser=useSelector(state=>state.user.currentUser)
     const [userposts,setuserposts]=useState([]);
+    const[showmore,setshowmore]=useState(true);
     console.log(userposts);
  useEffect(()=>
  {
@@ -21,6 +22,10 @@ function DashPosts() {
         }
         else{
             const data=await res.json();
+            if(data.posts.length<9)
+            {
+                setshowmore(false);
+            }
             setuserposts(data.posts);
         }
        
@@ -35,6 +40,27 @@ function DashPosts() {
   }
  },[currentUser._id]
  );
+ const handleshowmore=async ()=>
+    {
+       const startIndex =userposts.length;
+       try{
+        const res=await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+       
+        if(res.ok)
+        {
+            const data=await res.json();
+            setuserposts((prev)=>[...prev,...data.posts])
+            if(data.posts.length<9)
+            {
+                setshowmore(false);
+            }
+        }
+       } 
+       catch(error)
+        {
+            console.log(error.message)
+        }
+    }
  return <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-500 dark:scrollbar-thumb-slate-500'>
     {currentUser.isAdmin&&userposts.length>0?(
         <>
@@ -90,6 +116,13 @@ function DashPosts() {
                 </Table.Body>
             ))}
         </Table>
+        {
+            showmore&&(
+                <button onClick={handleshowmore} className="w-full py-2 mt-4 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-300 ease-in-out">
+                    Show More
+                </button>
+            )
+        }
         
         </>
     ):(

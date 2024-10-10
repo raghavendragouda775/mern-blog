@@ -15,6 +15,7 @@ function CreatePost() {
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formdata, setFormData] = useState({});
   const[PublishError,setPublishError]=useState(null);
+  const[showmore,setshowmore]=useState(true);
   console.log(formdata);
 
   const handleUploadImage = async () => {
@@ -32,16 +33,16 @@ function CreatePost() {
         'state_changed',
         (snapshot) => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setImageUploadProgress(progress.toFixed(0)); // Set progress correctly
+          setImageUploadProgress(progress.toFixed(0));
         },
         (error) => {
           console.error('Upload Error',error)
           setImageUploadError('Image upload failed'+error.message);
-          setImageUploadProgress(null); // Reset progress
+          setImageUploadProgress(null); 
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImageUploadProgress(null); // Reset progress
+            setImageUploadProgress(null); 
             setImageUploadError(null);
             setFormData({ ...formdata, image: downloadURL });
           });
@@ -49,7 +50,7 @@ function CreatePost() {
       );
     } catch (error) {
       setImageUploadError('Image upload error');
-      setImageUploadProgress(null); // Reset progress
+      setImageUploadProgress(null); 
       console.log(error);
     }
   };
