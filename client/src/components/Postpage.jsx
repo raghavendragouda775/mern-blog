@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 
 import React, { useEffect, useState } from 'react'
 import { Button, Spinner } from 'flowbite-react';
+import MoreInfoFunc from './MoreInfoFunc';
+import Commentsection from './commentsection';
 
 
 function Postpage() {
@@ -54,12 +56,12 @@ function Postpage() {
     
   return (
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
-    {/* Post Title */}
+  
     <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl transition duration-300 ease-in-out hover:underline dark:text-gray-100">
         {post && post.title}
     </h1>
     
-    {/* Category Button */}
+   
     <Link to={`/search?category=${post && post.category}`} className="self-center mt-5">
         <Button
             color="gray"
@@ -82,7 +84,7 @@ function Postpage() {
 
 
     
-    {/* Meta Info (Date and Read Time) */}
+
     <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs text-slate-600 dark:text-gray-400">
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className="italic">
@@ -90,11 +92,15 @@ function Postpage() {
         </span>
     </div>
     
-    {/* Post Content */}
+  
     <div
         className="p-3 max-w-2xl mx-auto w-full post-content text-slate-700 dark:text-gray-300 leading-relaxed"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
     />
+    <div className='max-w-4xl mx-auto w-full'>
+        <MoreInfoFunc/>
+    </div>
+    <Commentsection postId={post._id}/>
 </main>
 
 

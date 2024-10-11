@@ -3,9 +3,15 @@
 @tailwind utilities;
 
 
-body{
-    height: 100vh;
-}
+html, body {
+    height: auto;
+    overflow: visible;
+  }
+  
+* {
+    position: static !important; /* This is extreme, but it helps rule out fixed/sticky positioning */
+  }
+  
 
 .ql-editor{
     font-size: 1.05rem;
