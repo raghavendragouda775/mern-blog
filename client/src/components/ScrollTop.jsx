@@ -5,7 +5,7 @@ export const ScrollTop=()=>{
     const {pathname}=useLocation();
     useEffect(() => {
         // to directly touch the scrollable container in page
-        const scrollContainer = document.querySelector('.scrollable-container'); r
+        const scrollContainer = document.querySelector('.scrollable-container'); 
         if (scrollContainer) {
           scrollContainer.scrollTo(0, 0);
         } else {

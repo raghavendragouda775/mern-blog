@@ -67,22 +67,21 @@ export const likecomment = async (req, res, next) => {
             return next(errorhandler(404, 'Comment not found'));
         }
 
-        // Check if the user has already liked the comment
+        
         const userIndex = comment.likes.indexOf(req.user.id);
         if (userIndex === -1) {
-            // If the user hasn't liked the comment, add a like
+           
             comment.numberOfLikes += 1;
             comment.likes.push(req.user.id);
         } else {
-            // If the user has already liked the comment, remove the like
-            comment.numberOfLikes = Math.max(0, comment.numberOfLikes - 1); // Ensure it doesn't go below 0
-            comment.likes.splice(userIndex, 1);
+            
+            comment.numberOfLikes = Math.max(0, comment.numberOfLikes - 1); 
         }
 
-        // Save the updated comment
+        
         await comment.save();
 
-        // Send the updated likes and numberOfLikes in the response
+       
         res.status(200).json({
             likes: comment.likes,
             numberOfLikes: comment.numberOfLikes,
@@ -91,3 +90,25 @@ export const likecomment = async (req, res, next) => {
         next(error);
     }
 };
+export const editComment=async(req,res,next)=>
+{
+    try {
+        const comment=await Comment.findById(req.params.commentId);
+        if(!comment)
+        {
+            return next(errorhandler(404,'Comment Not Found'))
+        }
+        if(comment.userId!==req.user.id&&!req.user.isAdmin)
+        {
+            return next(errorhandler(403,'You are not allowed to edit this Comment'));
+        }
+        const editedcomment=await Comment.findByIdAndUpdate(req.params.commentId,
+        {
+            content:req.body.content,
+        },{new:true}
+    )
+    res.status(200).json(editedcomment);
+    } catch (error) {
+        next(error);
+    }
+}
