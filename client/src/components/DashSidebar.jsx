@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { HiDocumentText } from "react-icons/hi";
 import { useSelector } from 'react-redux';
 import { HiOutlineUserGroup } from "react-icons/hi";
+import { HiChartPie } from 'react-icons/hi';
 
 
 
@@ -54,8 +55,19 @@ useEffect(()=>{
     <Sidebar className='w-full md:w-56'>
         <Sidebar.Items>
             <Sidebar.ItemGroup className='flex flex-col gap-2'>
+            {currentUser && currentUser.isAdmin && (
+            <Link to='/dashboard?tab=dash'>
+              <Sidebar.Item
+                active={tab === 'dash' || !tab}
+                icon={HiChartPie}
+                as='div'
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+          )}
                 
-                <Sidebar.Item active={tab==='profile'} href="/dashboard?tab=profile" icon={HiUser} label={currentUser.isAdmin?'Admin':'User'} labelColor='dark'>
+                <Sidebar.Item active={tab==='profile'} href="/dashboard?tab=profile" icon={HiUser} label={currentUser.isAdmin?'Admin':'User'}  labelColor='dark'>
                     Profile
                 </Sidebar.Item>
                 {currentUser.isAdmin && (
@@ -89,7 +101,7 @@ useEffect(()=>{
           </>
                 
                
-                <Sidebar.Item  icon={HiArrowSmRight} href="/Sign-in"label={'user'} labelColor='dark' onClick={handleSignOut}>
+                <Sidebar.Item  icon={HiArrowSmRight} href="/Sign-in"label={'user'} labelColor='dark'  onClick={handleSignOut}>
                     Sign Out
                 </Sidebar.Item>
                 
