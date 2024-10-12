@@ -15,7 +15,7 @@ import PrivateAuth from './components/privateAuth'
 import OnlyAdminPrivate from './components/OnlyAdminPrivate';
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/Updatepost';
-import Postpage from './components/Postpage';
+import Postpage from './pages/Postpage';
 import { ScrollTop } from './components/ScrollTop';
 function App() {
   return (
