@@ -131,3 +131,25 @@ export const deleteComment=async(req,res,next)=>
     }
 
 }
+export const getcomments=async(req,res,next)=>{
+    if(!req.user.isAdmin)
+    {
+        return next(errorhandler(403,'Your are not allowed to fetch comments'))
+    } 
+    
+    try {
+        const StartIndex=parseInt(req.query.StartIndex)||0;
+        const limit=parseInt(req.query.limit)||9;
+        const sortDirection=req.query.sort==='desc'?-1:1;
+        const comments=await Comment.find().sort({createdAt:sortDirection}).skip(StartIndex).limit(limit);
+        const totalComments=await Comment.countDocuments();
+        const now=new Date();
+        const oneMonthAgo=new Date(now.getFullYear(),now.getMonth()-1,now.getDate());
+        const lastMonthComments=await Comment.countDocuments({createdAt:{$gte:oneMonthAgo}})
+        res.status(200).json({comments,totalComments,lastMonthComments})
+
+    } catch (error) {
+        next(error);
+    }
+
+}
