@@ -16,7 +16,7 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon index.js",
     "client": "npm run dev --prefix client",
- "build": "npm install && npm install --prefix client && npx vite build --prefix client"
+ "build": "npm install && npm install --prefix client && cd client && npx vite build"
   },
   "engines": {
   "node": ">=16.0.0"
