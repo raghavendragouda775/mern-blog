@@ -1,17 +1,35 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/theme/themeSlice';
 import { signOutSuccess } from '../redux/User/UserSlice';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate=useNavigate();
   const path = useLocation().pathname;
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
   const { theme } = useSelector((state) => state.theme);
+  const[searchTerm,setSearchTerm]=useState('');
+  const location =useLocation();
+  console.log("loaction search",location.search);
+  console.log("searchTerm",searchTerm);
+
+  useEffect(()=>{
+       const urlParams=new URLSearchParams(location.search)
+       console.log("urlparams:",urlParams);
+       const searchTermFromUrl=urlParams.get('searchTerm')
+       console.log("SearchFromUrls",searchTermFromUrl);
+       if(searchTermFromUrl)
+       {
+          setSearchTerm(searchTermFromUrl)
+       }
+  },[location.search])
 
   const handleSignOut = async () => {
     try {
@@ -29,6 +47,14 @@ export default function Header() {
       console.log(error);
     }
   };
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    const urlParams=new URLSearchParams(location.search)
+    urlParams.set('searchTerm',searchTerm)
+    const searchQuery=urlParams.toString();
+    console.log("searchQuery:",searchQuery);
+    navigate(`/search?${searchQuery}`);
+  }
 
   const profilePicture = currentUser?.profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
@@ -41,12 +67,14 @@ export default function Header() {
         Blog
       </Link>
 
-      <form className="hidden lg:flex">
+      <form className="hidden lg:flex" onSubmit={handleSubmit}>
         <TextInput
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
           className="lg:inline mb-2"
+          value={searchTerm}
+          onChange={(e)=>setSearchTerm(e.target.value)}
         />
       </form>
 
