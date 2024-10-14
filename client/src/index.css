@@ -7,7 +7,15 @@ html, body {
     height: auto;
     overflow: visible;
   }
-  
+  .navbar-container {
+    position: relative; /* Ensure dropdowns position correctly */
+  }
+  .dropdown-content {
+    position: absolute; /* Ensures dropdowns are placed correctly */
+    top: 100%; /* Positions the dropdown below the avatar */
+    left: 0; /* Aligns dropdown with the left side of the avatar */
+    z-index: 1000; /* Keeps it above other content */
+  }
 * {
     position: static !important; /* This is extreme, but it helps rule out fixed/sticky positioning */
   }

@@ -1,8 +1,14 @@
 import React from 'react'
+import MoreInfoFunc from '../components/MoreInfoFunc'
 
 function Projects() {
   return (
-    <div>Projects</div>
+    <div className='min-h-screen max-w2xl mx-auto flex justify-center items-center flex-col gap-6 p-3
+    '>
+      <h1 className='text-3xl font-semibold'>Projects</h1>
+      <p className='text-md text-gray-500'> Build Fun and Engaging projects while learning html,css,javascript</p>
+      <MoreInfoFunc/>
+    </div>
   )
 }
 
