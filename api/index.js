@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 import postRoutes from './routes/post.routes.js';
 import commentRoute from './routes/comment.route.js';
+import path from 'path';
 
 
 dotenv.config();  
@@ -32,12 +33,18 @@ mongoose.connect(process.env.MONGO_URL,{
     .catch(err => {
         console.error('MongoDB connection error:', err);
     });
+    const __dirname=path.resolve();
 
 
 app.use("/api/user",UserRoutes);
 app.use("/api/auth",AuthRoutes);
 app.use("/api/post",postRoutes);
 app.use("/api/comment",commentRoute);
+
+app.use(express.static(path.join(__dirname,'/client/dist')));
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','dist','index.html'))
+});
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');
